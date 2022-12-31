@@ -18,4 +18,13 @@ module.exports = {
     "vue/multi-word-component-names": "off",
     "@typescript-eslint/no-var-requires": "off",
   },
+  // 解决 *.d.ts 类型接口引入到vue时仍然报错(not defined)
+  overrides: [
+    {
+      files: ["*.ts", "*.vue"],
+      rules: {
+        "no-undef": "off",
+      },
+    },
+  ],
 };

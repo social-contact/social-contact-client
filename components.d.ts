@@ -7,10 +7,14 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElForm: typeof import('element-plus/es')['ElForm']
+    ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElIcon: typeof import('element-plus/es')['ElIcon']
-    IEpClose: typeof import('~icons/ep/close')['default']
-    IEpSetting: typeof import('~icons/ep/setting')['default']
+    ElInput: typeof import('element-plus/es')['ElInput']
+    IEpCloseBold: typeof import('~icons/ep/close-bold')['default']
+    IEpTools: typeof import('~icons/ep/tools')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
