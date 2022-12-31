@@ -10,6 +10,7 @@ import createWindow from "./window/mainWindow";
 import loginWindow from "./window/loginWindow";
 
 // 引入模块
+import { closeWindow } from "./modules/index";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
@@ -77,9 +78,12 @@ app.on("ready", async () => {
         password: data.password,
       })
     );
-    // (mainWin as BrowserWindow).close();
-    // mainWin = await createWindow();
+    (mainWin as BrowserWindow).close();
+    mainWin = await createWindow();
   });
+
+  // 模块
+  closeWindow(mainWin);
 });
 
 // Exit cleanly on request from parent process in development mode.
