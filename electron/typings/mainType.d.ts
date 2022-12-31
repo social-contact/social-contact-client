@@ -1,4 +1,4 @@
 interface ElectronUserAccount {
-  username: string;
+  account: string;
   password?: string;
 }

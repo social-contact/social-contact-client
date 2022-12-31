@@ -54,7 +54,7 @@ app.on("ready", async () => {
     fs.readFileSync(path.join(__dirname, "../public/info/user.json")).toString()
   );
   // 判断是否保存用户账号
-  if (user.username) {
+  if (user.account) {
     ipcMain.on("get-user-info-main", (event: IpcMainEvent) => {
       event.reply("get-user-info-render", user);
     });
