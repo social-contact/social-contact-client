@@ -61,11 +61,24 @@ app.on("ready", async () => {
   }
 
   // 接收登录
-  ipcMain.on("login", async (event: IpcMainEvent, data: string) => {
+  interface IpcLoginParams extends ElectronUserAccount {
+    token: string;
+  }
+  ipcMain.on("login", async (event: IpcMainEvent, data: IpcLoginParams) => {
     // 保存登录信息
-    fs.writeFileSync(path.join(__dirname, "../public/info/token.json"), data);
-    (mainWin as BrowserWindow).close();
-    mainWin = await createWindow();
+    fs.writeFileSync(
+      path.join(__dirname, "../public/info/token.json"),
+      JSON.stringify({ token: data.token })
+    );
+    fs.writeFileSync(
+      path.join(__dirname, "../public/info/user.json"),
+      JSON.stringify({
+        account: data.account,
+        password: data.password,
+      })
+    );
+    // (mainWin as BrowserWindow).close();
+    // mainWin = await createWindow();
   });
 });
 
