@@ -1,8 +1,12 @@
 const { defineConfig } = require("@vue/cli-service");
 
+// 自动引入element-plus
 const AutoImport = require("unplugin-auto-import/webpack");
 const Components = require("unplugin-vue-components/webpack");
 const { ElementPlusResolver } = require("unplugin-vue-components/resolvers");
+// icon
+const Icons = require("unplugin-icons/webpack");
+const IconsResolver = require("unplugin-icons/resolver");
 
 const path = require("path");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
@@ -19,11 +23,15 @@ module.exports = defineConfig({
     plugins: [
       new NodePolyfillPlugin(),
       AutoImport({
-        resolvers: [ElementPlusResolver()],
+        resolvers: [ElementPlusResolver(), IconsResolver({ prefix: "Icon" })],
       }),
       Components({
-        resolvers: [ElementPlusResolver()],
+        resolvers: [
+          IconsResolver({ enabledCollections: ["ep"] }),
+          ElementPlusResolver(),
+        ],
       }),
+      Icons({ autoInstall: true }),
     ],
     resolve: {
       alias: {
