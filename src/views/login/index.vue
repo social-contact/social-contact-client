@@ -46,6 +46,7 @@
             <el-button
               class="btn-login"
               type="primary"
+              :loading="buttonLoading"
               @click="submitForm(ruleFormRef)"
               >登录</el-button
             >
@@ -60,13 +61,20 @@
 </template>
 
 <script setup lang="ts">
-import { ipcRenderer, IpcRendererEvent } from "electron";
+import { ipcRenderer } from "electron";
 import { onMounted, reactive, ref } from "vue";
 import type { FormInstance } from "element-plus";
+
+import { userStore } from "@/plugins/store/modules/user";
+
+const userStoreRecord = userStore();
 
 const squareUrl = ref<string>(
   "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
 );
+
+// 按钮加载状态
+const buttonLoading = ref<boolean>(false);
 
 // form
 const ruleFormRef = ref<FormInstance>();
@@ -100,6 +108,8 @@ const rules = reactive({
 
 onMounted(() => {
   // 自动获取已经保存的账号密码
+  ruleForm.account = userStoreRecord.getUserInfo.account;
+  ruleForm.password = userStoreRecord.getUserInfo.password;
 });
 
 // form
@@ -108,12 +118,18 @@ const submitForm = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       console.log("submit!");
-      const user = {
-        account: ruleForm.account,
-        password: ruleForm.password,
-        token: "123",
-      };
-      ipcRenderer.send("login");
+      buttonLoading.value = true;
+      setTimeout(() => {
+        const user: LoginData = {
+          account: ruleForm.account,
+          password: ruleForm.password,
+          accessToken: "123",
+        };
+        userStoreRecord.authLogin(user).then(() => {
+          buttonLoading.value = false;
+          ipcRenderer.send("authLogin");
+        });
+      }, 1000);
     } else {
       console.log("error submit!");
       return false;
