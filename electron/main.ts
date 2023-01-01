@@ -45,11 +45,11 @@ app.on("ready", async () => {
       console.error("Vue Devtools failed to install:", (e as Error).toString());
     }
   }
-
-  mainWin = await loginWindow(); // 登录窗口
+  // 创建登录窗口
+  mainWin = await loginWindow();
 
   // 接收登录
-  ipcMain.on("login", async () => {
+  ipcMain.on("authLogin", async () => {
     (mainWin as BrowserWindow).close();
     mainWin = await createWindow();
   });
