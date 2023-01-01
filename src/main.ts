@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import router from "./router";
+import router from "./plugins/router";
 
 // 初始化样式
 import "@/style/reset.css";
