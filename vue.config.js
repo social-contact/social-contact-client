@@ -19,6 +19,16 @@ module.exports = defineConfig({
       nodeIntegration: true, // 开启node支持
     },
   },
+  // 引入全局scss
+  css: {
+    loaderOptions: {
+      scss: {
+        additionalData: `
+        @import "@/styles/global.scss";
+        `,
+      },
+    },
+  },
   configureWebpack: {
     plugins: [
       new NodePolyfillPlugin(),
