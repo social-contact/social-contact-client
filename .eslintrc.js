@@ -17,6 +17,8 @@ module.exports = {
     "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
     "vue/multi-word-component-names": "off",
     "@typescript-eslint/no-var-requires": "off",
+    // 关闭 any 警告
+    "@typescript-eslint/no-explicit-any": "off",
   },
   overrides: [
     {
