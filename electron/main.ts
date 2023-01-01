@@ -4,7 +4,7 @@ import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 
 // 引入窗口
 import createWindow from "./window/mainWindow";
-import loginWindow from "./window/loginWindow";
+import authWindow from "./window/authWindow";
 
 // 引入模块
 import { closeWindow } from "./modules/index";
@@ -46,7 +46,7 @@ app.on("ready", async () => {
     }
   }
   // 创建登录窗口
-  mainWin = await loginWindow();
+  mainWin = await authWindow();
 
   // 接收登录
   ipcMain.on("authLogin", async () => {

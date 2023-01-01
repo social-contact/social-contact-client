@@ -1,5 +1,5 @@
 <template>
-  <div class="window">
+  <div class="window flip-2-hor-top-1">
     <div class="top">
       <div class="top_title">social</div>
       <div class="top_operation">
@@ -225,6 +225,30 @@ const closeWindow = () => {
 
   .el-link {
     user-select: none;
+  }
+}
+
+.flip-2-hor-top-1 {
+  animation: flip-2-hor-top-1 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+}
+// @keyframes flip-2-hor-top-1 {
+//   0% {
+//     transform: translateY(0) rotateX(0);
+//     transform-origin: 50% 0;
+//   }
+//   100% {
+//     transform: translateY(-100%) rotateX(-180deg);
+//     transform-origin: 50% 100%;
+//   }
+// }
+@keyframes flip-2-hor-top-1 {
+  0% {
+    transform: translateY(-100%) rotateX(-180deg);
+    transform-origin: 50% 100%;
+  }
+  100% {
+    transform: translateY(0) rotateX(0);
+    transform-origin: 50% 0;
   }
 }
 </style>
