@@ -4,4 +4,5 @@ export const userStore = defineStore("userStore", {
   state: () => ({}),
   getters: {},
   actions: {},
+  persist: true,
 });
