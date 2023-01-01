@@ -28,6 +28,8 @@ export default async function createWindow(): Promise<BrowserWindow> {
   }
 
   win.on("close", () => {
+    // 窗口退出时发送
+    (win as BrowserWindow).webContents.send("window-close");
     win = null; //删除引用，释放内存，防止内存泄露
   });
   return win;
