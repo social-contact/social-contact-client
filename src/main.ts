@@ -4,7 +4,7 @@ import router from "./plugins/router";
 import store from "./plugins/store";
 
 // 初始化样式
-import "@/style/reset.css";
+import "@/styles/reset.css";
 
 const app = createApp(App);
 
