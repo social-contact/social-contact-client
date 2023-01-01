@@ -1,0 +1,63 @@
+/*
+* 动画
+*/
+
+// 滑入顶部
+.slide-in-top {
+  animation: slide-in-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@keyframes slide-in-top {
+  0% {
+    transform: translateY(-370px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+// 滑入底部
+.slide-in-bottom {
+  animation: slide-in-bottom 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@keyframes slide-in-bottom {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-370px);
+  }
+}
+
+// 滑入左部
+.slide-in-left {
+  animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@keyframes slide-in-left {
+  0% {
+    transform: translateX(-300px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+// 滑入右部
+.slide-in-right {
+  animation: slide-in-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-300px);
+  }
+}
