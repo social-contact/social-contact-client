@@ -2,9 +2,6 @@ import { app, protocol, BrowserWindow, ipcMain, IpcMainEvent } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 
-import fs from "fs";
-import path from "path";
-
 // 引入窗口
 import createWindow from "./window/mainWindow";
 import loginWindow from "./window/loginWindow";
@@ -50,34 +47,9 @@ app.on("ready", async () => {
   }
 
   mainWin = await loginWindow(); // 登录窗口
-  // 获取保存的账号密码
-  const user: ElectronUserAccount = JSON.parse(
-    fs.readFileSync(path.join(__dirname, "../public/info/user.json")).toString()
-  );
-  // 判断是否保存用户账号
-  if (user.account) {
-    ipcMain.on("get-user-info-main", (event: IpcMainEvent) => {
-      event.reply("get-user-info-render", user);
-    });
-  }
 
   // 接收登录
-  interface IpcLoginParams extends ElectronUserAccount {
-    token: string;
-  }
-  ipcMain.on("login", async (event: IpcMainEvent, data: IpcLoginParams) => {
-    // 保存登录信息
-    fs.writeFileSync(
-      path.join(__dirname, "../public/info/token.json"),
-      JSON.stringify({ token: data.token })
-    );
-    fs.writeFileSync(
-      path.join(__dirname, "../public/info/user.json"),
-      JSON.stringify({
-        account: data.account,
-        password: data.password,
-      })
-    );
+  ipcMain.on("login", async () => {
     (mainWin as BrowserWindow).close();
     mainWin = await createWindow();
   });

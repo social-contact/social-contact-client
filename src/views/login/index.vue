@@ -100,14 +100,6 @@ const rules = reactive({
 
 onMounted(() => {
   // 自动获取已经保存的账号密码
-  ipcRenderer.send("get-user-info-main");
-  ipcRenderer.on(
-    "get-user-info-render",
-    (event: IpcRendererEvent, data: LoginParams) => {
-      ruleForm.account = data.account;
-      ruleForm.password = data.password;
-    }
-  );
 });
 
 // form
@@ -121,7 +113,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
         password: ruleForm.password,
         token: "123",
       };
-      ipcRenderer.send("login", user);
+      ipcRenderer.send("login");
     } else {
       console.log("error submit!");
       return false;
