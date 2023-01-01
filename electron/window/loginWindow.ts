@@ -4,7 +4,7 @@ import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 // Scheme must be registered before the app is ready
 export default async function loginWindow(): Promise<BrowserWindow> {
   // Create the browser window.
-  const win = new BrowserWindow({
+  let win: BrowserWindow | null = new BrowserWindow({
     width: 300,
     height: 400,
     frame: false, // 无边框
@@ -28,5 +28,10 @@ export default async function loginWindow(): Promise<BrowserWindow> {
     // Load the index.html when not in development
     win.loadURL("app://./index.html");
   }
+
+  win.on("close", () => {
+    win = null; //删除引用，释放内存，防止内存泄露
+  });
+
   return win;
 }
