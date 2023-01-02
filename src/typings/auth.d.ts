@@ -12,4 +12,6 @@ interface RegisterParams {
   account: string;
   password?: string;
   checkpassword?: string;
+  email?: string;
+  code?: string;
 }
