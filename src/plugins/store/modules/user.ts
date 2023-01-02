@@ -22,7 +22,7 @@ export const userStore = defineStore("userStore", {
   actions: {
     authLogin(res: LoginData): Promise<void> {
       this.userInfo.account = res.account;
-      this.userInfo.password = res.password;
+      // this.userInfo.password = res.password;
       this.accessToken = res.accessToken;
       return Promise.resolve();
     },
