@@ -15,3 +15,10 @@ export function UserRegister(data: RegisterParams): Promise<null> {
     data,
   });
 }
+
+export function UserSendMessage() {
+  return request({
+    url: "/user/sendMessage",
+    method: "post",
+  });
+}
