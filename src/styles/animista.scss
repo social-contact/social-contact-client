@@ -61,3 +61,19 @@
     transform: translateX(-300px);
   }
 }
+
+
+// 文字滚动
+@keyframes text-left-right-scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
