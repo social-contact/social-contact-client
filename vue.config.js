@@ -15,7 +15,7 @@ module.exports = defineConfig({
   transpileDependencies: true,
   pluginOptions: {
     electronBuilder: {
-      mainProcessFile: "electron/main.ts", // 修改主进程入口文件路径
+      mainProcessFile: "src/electron/main.ts", // 修改主进程入口文件路径
       nodeIntegration: true, // 开启node支持
     },
   },
