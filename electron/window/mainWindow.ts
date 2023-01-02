@@ -24,7 +24,8 @@ export default async function createWindow(): Promise<BrowserWindow> {
   } else {
     createProtocol("app");
     // Load the index.html when not in development
-    win.loadURL("app://./index.html");
+    // #home 在加载时跳转到指定路由（#路由地址）
+    win.loadURL("app://./index.html#home");
   }
 
   win.on("close", () => {
