@@ -51,7 +51,7 @@ const onSign = () => {
 // 窗口大小
 .window {
   width: 300px;
-  height: 400px;
+  height: 450px;
   overflow: hidden;
 }
 
