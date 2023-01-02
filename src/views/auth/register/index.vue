@@ -13,18 +13,28 @@
         >
           <!-- 账号 -->
           <el-form-item prop="account">
-            <el-input v-model="ruleForm.account" type="text" placeholder="账号">
+            <el-input
+              v-model="ruleForm.account"
+              type="text"
+              maxlength="18"
+              placeholder="账号"
+            >
               <template #prefix>
                 <el-icon><i-ep-User /></el-icon>
               </template>
             </el-input>
           </el-form-item>
           <!-- 密码 -->
-          <el-form-item prop="password">
+          <el-form-item
+            prop="password"
+            :class="isValidateTextLong ? 'text-left-right-scroll' : ''"
+          >
             <el-input
               v-model="ruleForm.password"
               type="password"
+              maxlength="16"
               placeholder="密码"
+              show-password
             >
               <template #prefix>
                 <el-icon><i-ep-Unlock /></el-icon>
@@ -32,21 +42,47 @@
             </el-input>
           </el-form-item>
           <!-- 确认密码 -->
-          <el-form-item prop="checkpassword">
+          <el-form-item
+            prop="checkpassword"
+            :class="isValidateTextLong ? 'text-left-right-scroll' : ''"
+          >
             <el-input
               v-model="ruleForm.checkpassword"
               type="password"
+              maxlength="16"
               placeholder="确认密码"
+              show-password
             >
               <template #prefix>
                 <el-icon><i-ep-Unlock /></el-icon>
               </template>
             </el-input>
           </el-form-item>
+          <!-- 邮箱 -->
+          <el-form-item prop="email">
+            <el-input v-model="ruleForm.email" type="text" placeholder="邮箱">
+              <template #prefix>
+                <el-icon><i-ep-Message /></el-icon>
+              </template>
+            </el-input>
+          </el-form-item>
+          <!-- 验证码 -->
+          <el-form-item prop="code" class="code">
+            <el-input v-model="ruleForm.code" type="text" placeholder="验证码">
+              <template #prefix>
+                <el-icon><i-ep-Key /></el-icon>
+              </template>
+              <template #append>
+                <el-button :disabled="isCodeing" @click="getCode">{{
+                  codeText
+                }}</el-button>
+              </template>
+            </el-input>
+          </el-form-item>
           <!-- 注册按钮 -->
           <el-form-item>
             <el-button
-              class="btn-login"
+              class="btn-register"
               type="primary"
               :loading="buttonLoading"
               @click="submitForm(ruleFormRef)"
@@ -76,10 +112,23 @@ const Emit = defineEmits(["onSign"]);
 // 按钮加载状态
 const buttonLoading = ref<boolean>(false);
 
+// 获取验证码按钮状态
+const isCodeing = ref<boolean>(false);
+// 获取验证码按钮提示
+const codeText = ref<string>("获取验证码");
+
+// 判断校验提示文字过长添加动画
+const isValidateTextLong = ref<boolean>(false);
+
 // form
 const ruleFormRef = ref<FormInstance>();
 
-// 账号效验
+// 正则
+const passRegex =
+  /(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*()_.]+)$)^[\w~!@#$%^&*()_.]{8,16}$/; // 密码校验
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/; // 邮箱校验
+
+// 账号校验
 const validateAccount = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入账号"));
@@ -87,10 +136,18 @@ const validateAccount = (rule: any, value: any, callback: any) => {
     callback();
   }
 };
-// 密码效验
+// 密码校验
 const validatePass = (rule: any, value: any, callback: any) => {
+  isValidateTextLong.value = false;
   if (value === "") {
     callback(new Error("请输入密码"));
+  } else if (!passRegex.test(value)) {
+    isValidateTextLong.value = true;
+    callback(
+      new Error(
+        "密码应为字母，数字，特殊符号(~!@#$%^&*()_.)，两种及以上组合，8-16位字符串，如：123456@aa"
+      )
+    );
   } else {
     if (ruleForm.checkpassword !== "") {
       if (!ruleFormRef.value) return;
@@ -100,10 +157,28 @@ const validatePass = (rule: any, value: any, callback: any) => {
   }
 };
 const validatePass2 = (rule: any, value: any, callback: any) => {
+  isValidateTextLong.value = false;
   if (value === "") {
     callback(new Error("请输入密码"));
+  } else if (!passRegex.test(value)) {
+    isValidateTextLong.value = true;
+    callback(
+      new Error(
+        "密码应为字母，数字，特殊符号(~!@#$%^&*()_.)，两种及以上组合，8-16位字符串，如：123456@aa"
+      )
+    );
   } else if (value !== ruleForm.password) {
     callback(new Error("两次密码不一致！"));
+  } else {
+    callback();
+  }
+};
+// 邮箱校验
+const validateEmail = (rule: any, value: any, callback: any) => {
+  if (value === "") {
+    callback(new Error("请输入邮箱"));
+  } else if (!emailRegex.test(value)) {
+    callback(new Error("请输入正确的邮箱格式"));
   } else {
     callback();
   }
@@ -114,12 +189,16 @@ const ruleForm = reactive<RegisterParams>({
   account: "",
   password: "",
   checkpassword: "",
+  email: "",
+  code: "",
 });
 
 const rules = reactive({
-  account: [{ validator: validateAccount, trigger: "blur" }],
-  password: [{ validator: validatePass, trigger: "blur" }],
-  checkpassword: [{ validator: validatePass2, trigger: "blur" }],
+  account: [{ validator: validateAccount, trigger: "change" }],
+  password: [{ validator: validatePass, trigger: "change" }],
+  checkpassword: [{ validator: validatePass2, trigger: "change" }],
+  email: [{ validator: validateEmail, trigger: "change" }],
+  code: [{ required: true, message: "请输入验证码", trigger: "change" }],
 });
 
 // form
@@ -131,6 +210,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
       UserRegister({
         account: ruleForm.account,
         password: highToLowMD5(md5(ruleForm.password).toString().toUpperCase()),
+        email: "",
+        code: "",
       })
         .then(() => {
           buttonLoading.value = false;
@@ -140,7 +221,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
             type: "success",
             duration: 3 * 1000,
           });
-          Emit("onSign");
+          onSign();
         })
         .catch(() => {
           buttonLoading.value = false;
@@ -151,7 +232,24 @@ const submitForm = (formEl: FormInstance | undefined) => {
   });
 };
 
+const getCode = () => {
+  isCodeing.value = true;
+  // 倒计时
+  let countdown = 59;
+  codeText.value = `${countdown--} 秒`;
+  const Interval = setInterval(() => {
+    if (countdown === -1) {
+      isCodeing.value = false;
+      codeText.value = "获取验证码";
+      clearInterval(Interval);
+    } else {
+      codeText.value = `${countdown--} 秒`;
+    }
+  }, 1000);
+};
+
 const onSign = () => {
+  ruleFormRef.value?.resetFields();
   Emit("onSign");
 };
 </script>
@@ -162,23 +260,65 @@ const onSign = () => {
   user-select: none;
 
   .title {
-    height: 100px;
-    line-height: 100px;
+    height: 50px;
+    line-height: 50px;
     text-align: center;
   }
 
+  // 表单
   .form {
-    .el-form-item {
+    .el-form {
       width: 70%;
       margin-left: auto;
       margin-right: auto;
-      ::v-deep .el-form-item__content {
-        margin: 0 !important;
-      }
-    }
+      overflow: hidden; /*文字溢出隐藏*/
 
-    .btn-login {
-      width: 100%;
+      .el-form-item {
+        :deep(.el-form-item__content) {
+          margin: 0 !important;
+          white-space: nowrap; /*文字不折行*/
+        }
+        // 校验提示过长时添加动画
+        &.text-left-right-scroll {
+          :deep(.el-form-item__error) {
+            animation: 20s linear infinite text-left-right-scroll; /*滚动动画*/
+          }
+        }
+
+        // 验证码
+        &.code {
+          :deep(.el-form-item__content) {
+            flex-wrap: nowrap;
+          }
+
+          // 输入框
+          .el-input {
+            :deep(.el-input__wrapper) {
+              padding-right: 0;
+            }
+
+            :deep(.el-input__suffix) {
+              display: none;
+            }
+
+            // 尾部按钮
+            :deep(.el-input-group__append) {
+              font-size: 12px;
+              width: 120px;
+              padding: 0;
+              color: #000;
+
+              .is-disabled {
+                color: #909399;
+              }
+            }
+          }
+        }
+      }
+      // 按钮
+      .btn-register {
+        width: 100%;
+      }
     }
   }
 }

@@ -14,17 +14,27 @@
           class="demo-ruleForm"
         >
           <el-form-item prop="account">
-            <el-input v-model="ruleForm.account" type="text" placeholder="账号">
+            <el-input
+              v-model="ruleForm.account"
+              type="text"
+              maxlength="18"
+              placeholder="账号"
+            >
               <template #prefix>
                 <el-icon><i-ep-User /></el-icon>
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item prop="password">
+          <el-form-item
+            prop="password"
+            :class="isValidateTextLong ? 'text-left-right-scroll' : ''"
+          >
             <el-input
               v-model="ruleForm.password"
               type="password"
+              maxlength="16"
               placeholder="密码"
+              show-password
             >
               <template #prefix>
                 <el-icon><i-ep-Unlock /></el-icon>
@@ -71,10 +81,17 @@ const squareUrl = ref<string>(
 // 按钮加载状态
 const buttonLoading = ref<boolean>(false);
 
+// 判断校验提示文字过长添加动画
+const isValidateTextLong = ref<boolean>(false);
+
+// 正则
+const passRegex =
+  /(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*()_.]+)$)^[\w~!@#$%^&*()_.]{8,16}$/; // 密码校验
+
 // form
 const ruleFormRef = ref<FormInstance>();
 
-// 账号效验
+// 账号校验
 const validateAccount = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入账号"));
@@ -82,10 +99,18 @@ const validateAccount = (rule: any, value: any, callback: any) => {
     callback();
   }
 };
-// 密码效验
+// 密码校验
 const validatePass = (rule: any, value: any, callback: any) => {
+  isValidateTextLong.value = false;
   if (value === "") {
     callback(new Error("请输入密码"));
+  } else if (!passRegex.test(value)) {
+    isValidateTextLong.value = true;
+    callback(
+      new Error(
+        "密码应为字母，数字，特殊符号(~!@#$%^&*()_.)，两种及以上组合，8-16位字符串，如：123456@aa"
+      )
+    );
   } else {
     callback();
   }
@@ -97,8 +122,8 @@ const ruleForm = reactive<LoginParams>({
 });
 
 const rules = reactive({
-  account: [{ validator: validateAccount, trigger: "blur" }],
-  password: [{ validator: validatePass, trigger: "blur" }],
+  account: [{ validator: validateAccount, trigger: "change" }],
+  password: [{ validator: validatePass, trigger: "change" }],
 });
 
 onMounted(() => {
@@ -139,6 +164,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
 };
 
 const onSign = () => {
+  // 重置 password 校验
+  ruleFormRef.value?.resetFields(["password"]);
   Emit("onSign");
 };
 </script>
@@ -147,20 +174,39 @@ const onSign = () => {
 // 中部
 .central-section {
   user-select: none;
+
   .avatar {
     margin: 50px 0 40px;
     display: flex;
     justify-content: center;
     align-items: center;
+
+    .el-avatar {
+      :deep(img) {
+        // 图片不可拖动
+        -webkit-user-drag: none;
+      }
+    }
   }
 
   .form {
-    .el-form-item {
+    .el-form {
       width: 70%;
       margin-left: auto;
       margin-right: auto;
-      ::v-deep .el-form-item__content {
-        margin: 0 !important;
+      overflow: hidden; /*文字溢出隐藏*/
+
+      .el-form-item {
+        :deep(.el-form-item__content) {
+          margin: 0 !important;
+          white-space: nowrap; /*文字不折行*/
+        }
+        // 校验提示过长时添加动画
+        &.text-left-right-scroll {
+          :deep(.el-form-item__error) {
+            animation: 20s linear infinite text-left-right-scroll; /*滚动动画*/
+          }
+        }
       }
     }
 
