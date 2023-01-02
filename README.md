@@ -1,4 +1,4 @@
-# electron-vue-code
+# social聊天室客户端
 
 ## Project setup
 ```
