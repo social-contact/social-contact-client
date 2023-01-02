@@ -3,6 +3,7 @@ const { defineConfig } = require("@vue/cli-service");
 // 自动引入element-plus
 const AutoImport = require("unplugin-auto-import/webpack");
 const Components = require("unplugin-vue-components/webpack");
+const ElementPlus = require("unplugin-element-plus/webpack");
 const { ElementPlusResolver } = require("unplugin-vue-components/resolvers");
 // icon
 const Icons = require("unplugin-icons/webpack");
@@ -41,6 +42,7 @@ module.exports = defineConfig({
           ElementPlusResolver(),
         ],
       }),
+      ElementPlus(),
       Icons({ autoInstall: true }),
     ],
     resolve: {
