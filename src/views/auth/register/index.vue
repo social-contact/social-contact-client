@@ -65,6 +65,11 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 import type { FormInstance } from "element-plus";
+import { ElMessage } from "element-plus";
+import md5 from "crypto-js/md5";
+import highToLowMD5 from "@/utils/highToLowMD5";
+
+import { UserRegister } from "@/api/auth";
 
 const Emit = defineEmits(["onSign"]);
 
@@ -122,13 +127,25 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      console.log("submit!");
       buttonLoading.value = true;
-      setTimeout(() => {
-        Emit("onSign");
-      }, 1000);
+      UserRegister({
+        account: ruleForm.account,
+        password: highToLowMD5(md5(ruleForm.password).toString().toUpperCase()),
+      })
+        .then(() => {
+          buttonLoading.value = false;
+          ElMessage({
+            showClose: true,
+            message: "注册成功!",
+            type: "success",
+            duration: 3 * 1000,
+          });
+          Emit("onSign");
+        })
+        .catch(() => {
+          buttonLoading.value = false;
+        });
     } else {
-      console.log("error submit!");
       return false;
     }
   });

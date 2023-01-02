@@ -53,6 +53,10 @@
 import { ipcRenderer } from "electron";
 import { onMounted, reactive, ref } from "vue";
 import type { FormInstance } from "element-plus";
+import md5 from "crypto-js/md5";
+import highToLowMD5 from "@/utils/highToLowMD5";
+
+import { UserLogin } from "@/api/auth";
 
 import { userStore } from "@/plugins/store/modules/user";
 
@@ -108,21 +112,27 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (valid) {
-      console.log("submit!");
       buttonLoading.value = true;
-      setTimeout(() => {
+      UserLogin({
+        account: ruleForm.account,
+        password: highToLowMD5(md5(ruleForm.password).toString().toUpperCase()),
+      }).then((res) => {
         const user: LoginData = {
           account: ruleForm.account,
-          password: ruleForm.password,
-          accessToken: "123",
+          // password: ruleForm.password,
+          accessToken: res,
         };
-        userStoreRecord.authLogin(user).then(() => {
-          buttonLoading.value = false;
-          ipcRenderer.send("authLogin");
-        });
-      }, 1000);
+        userStoreRecord
+          .authLogin(user)
+          .then(() => {
+            buttonLoading.value = false;
+            ipcRenderer.send("authLogin");
+          })
+          .catch(() => {
+            buttonLoading.value = false;
+          });
+      });
     } else {
-      console.log("error submit!");
       return false;
     }
   });
