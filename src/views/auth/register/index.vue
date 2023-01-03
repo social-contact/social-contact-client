@@ -125,7 +125,6 @@ const ruleFormRef = ref<FormInstance>();
 
 // 正则
 const accountRegex = /^[a-zA-Z0-9]{5,12}$/;
-
 const passRegex =
   /(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*()_.]+)$)^[\w~!@#$%^&*()_.]{8,16}$/; // 密码校验
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/; // 邮箱校验

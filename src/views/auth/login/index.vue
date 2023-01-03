@@ -85,6 +85,7 @@ const buttonLoading = ref<boolean>(false);
 const isValidateTextLong = ref<boolean>(false);
 
 // 正则
+const accountRegex = /^[a-zA-Z0-9]{5,12}$/;
 const passRegex =
   /(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*()_.]+)$)^[\w~!@#$%^&*()_.]{8,16}$/; // 密码校验
 
@@ -95,6 +96,8 @@ const ruleFormRef = ref<FormInstance>();
 const validateAccount = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入账号"));
+  } else if (!accountRegex.test(value)) {
+    callback(new Error("账号必须5位到12位数字或者英文"));
   } else {
     callback();
   }
