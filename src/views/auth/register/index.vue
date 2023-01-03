@@ -105,7 +105,7 @@ import { ElMessage } from "element-plus";
 import md5 from "crypto-js/md5";
 import highToLowMD5 from "@/utils/highToLowMD5";
 
-import { UserRegister } from "@/api/auth";
+import { UserRegister, UserSendMessage } from "@/api/auth";
 
 const Emit = defineEmits(["onSign"]);
 
@@ -124,6 +124,8 @@ const isValidateTextLong = ref<boolean>(false);
 const ruleFormRef = ref<FormInstance>();
 
 // 正则
+const accountRegex = /^[a-zA-Z0-9]{5,12}$/;
+
 const passRegex =
   /(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*()_.]+)$)^[\w~!@#$%^&*()_.]{8,16}$/; // 密码校验
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/; // 邮箱校验
@@ -132,6 +134,8 @@ const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/; // 邮�
 const validateAccount = (rule: any, value: any, callback: any) => {
   if (value === "") {
     callback(new Error("请输入账号"));
+  } else if (!accountRegex.test(value)) {
+    callback(new Error("账号必须5位到12位数字或者英文"));
   } else {
     callback();
   }
@@ -210,16 +214,15 @@ const submitForm = (formEl: FormInstance | undefined) => {
       UserRegister({
         account: ruleForm.account,
         password: highToLowMD5(md5(ruleForm.password).toString().toUpperCase()),
-        email: "",
-        code: "",
+        email: ruleForm.email,
+        code: ruleForm.code,
       })
         .then(() => {
           buttonLoading.value = false;
           ElMessage({
-            showClose: true,
             message: "注册成功!",
             type: "success",
-            duration: 3 * 1000,
+            duration: 2 * 1000,
           });
           onSign();
         })
@@ -232,8 +235,30 @@ const submitForm = (formEl: FormInstance | undefined) => {
   });
 };
 
+// 获取验证码
 const getCode = () => {
+  // 判断邮箱是否为空
+  if (ruleForm.email === "") {
+    ruleFormRef.value?.validateField("email");
+    return ElMessage({
+      message: "邮箱为空！",
+      type: "warning",
+      duration: 2 * 1000,
+    });
+  }
+
   isCodeing.value = true;
+  // 获取验证码请求
+  UserSendMessage({ email: ruleForm.email }).then((res) => {
+    console.log(res);
+
+    ElMessage({
+      message: "发送成功!",
+      type: "success",
+      duration: 2 * 1000,
+    });
+  });
+
   // 倒计时
   let countdown = 59;
   codeText.value = `${countdown--} 秒`;

@@ -8,6 +8,10 @@ interface Token {
 }
 interface LoginData extends LoginParams, Token {}
 
+interface EmailParams {
+  email: string;
+}
+
 interface RegisterParams {
   account: string;
   password?: string;

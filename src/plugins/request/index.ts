@@ -34,10 +34,9 @@ instance.interceptors.response.use(
       return res.data;
     }
     ElMessage({
-      showClose: true,
       message: res.message || "Error",
       type: "error",
-      duration: 5 * 1000,
+      duration: 3 * 1000,
     });
     return Promise.reject(new Error(res.message || "Error"));
   },
