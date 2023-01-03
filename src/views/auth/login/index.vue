@@ -141,22 +141,21 @@ const submitForm = (formEl: FormInstance | undefined) => {
       UserLogin({
         account: ruleForm.account,
         password: highToLowMD5(md5(ruleForm.password).toString().toUpperCase()),
-      }).then((res) => {
-        const user: LoginData = {
-          account: ruleForm.account,
-          // password: ruleForm.password,
-          accessToken: res,
-        };
-        userStoreRecord
-          .authLogin(user)
-          .then(() => {
-            buttonLoading.value = false;
+      })
+        .then((res) => {
+          buttonLoading.value = false;
+          const user: LoginData = {
+            account: ruleForm.account,
+            // password: ruleForm.password,
+            accessToken: res,
+          };
+          userStoreRecord.authLogin(user).then(() => {
             ipcRenderer.send("authLogin");
-          })
-          .catch(() => {
-            buttonLoading.value = false;
           });
-      });
+        })
+        .catch(() => {
+          buttonLoading.value = false;
+        });
     } else {
       return false;
     }
