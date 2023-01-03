@@ -12,6 +12,7 @@
           :rules="rules"
           label-width="120px"
           class="demo-ruleForm"
+          @keydown.enter="submitForm(ruleFormRef)"
         >
           <el-form-item prop="account">
             <el-input
