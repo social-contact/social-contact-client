@@ -36,7 +36,7 @@ instance.interceptors.response.use(
     ElMessage({
       message: res.message || "Error",
       type: "error",
-      duration: 3 * 1000,
+      duration: 2 * 1000,
     });
     return Promise.reject(new Error(res.message || "Error"));
   },
