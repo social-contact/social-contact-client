@@ -19,7 +19,7 @@ export default async function createWindow(): Promise<BrowserWindow> {
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    await win.loadURL((process.env.WEBPACK_DEV_SERVER_URL as string) + "home");
+    await win.loadURL((process.env.WEBPACK_DEV_SERVER_URL as string) + "#home");
     if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
     createProtocol("app");

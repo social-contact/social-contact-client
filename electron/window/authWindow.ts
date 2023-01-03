@@ -8,7 +8,7 @@ export default async function loginWindow(): Promise<BrowserWindow> {
     width: 300,
     height: 450,
     frame: false, // 无边框
-    // resizable: false, // 不允许改变窗口大小
+    resizable: false, // 不允许改变窗口大小
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -21,8 +21,8 @@ export default async function loginWindow(): Promise<BrowserWindow> {
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    await win.loadURL((process.env.WEBPACK_DEV_SERVER_URL as string) + "auth");
-    if (!process.env.IS_TEST) win.webContents.openDevTools();
+    await win.loadURL((process.env.WEBPACK_DEV_SERVER_URL as string) + "#auth");
+    // if (!process.env.IS_TEST) win.webContents.openDevTools();
   } else {
     createProtocol("app");
     // Load the index.html when not in development
