@@ -17,7 +17,6 @@ declare module '@vue/runtime-core' {
     IEpCloseBold: typeof import('~icons/ep/close-bold')['default']
     IEpKey: typeof import('~icons/ep/key')['default']
     IEpMessage: typeof import('~icons/ep/message')['default']
-    IEpTools: typeof import('~icons/ep/tools')['default']
     IEpUnlock: typeof import('~icons/ep/unlock')['default']
     IEpUser: typeof import('~icons/ep/user')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
