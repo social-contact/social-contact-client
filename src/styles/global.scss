@@ -1,2 +1,11 @@
 // 动画
 @import "./animista.scss";
+// 混入
+@import "./mixin.scss";
+
+
+// 全局通用样式
+$global-currency-background-color: rgb(251, 252, 254);
+$global-currency-box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+$global-currency-padding: 15px;
+$global-currency-border-radius: 15px;

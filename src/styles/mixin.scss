@@ -1,0 +1,6 @@
+@mixin divInitialization($bc: #fff, $bs: $global-currency-box-shadow, $br: $global-currency-border-radius) {
+  background-color: $bc;
+  box-shadow: $bs;
+  border-radius: $br;
+  overflow: hidden;
+}
