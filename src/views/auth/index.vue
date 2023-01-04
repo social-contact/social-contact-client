@@ -4,9 +4,10 @@
     <div class="top">
       <div class="top_title">social</div>
       <div class="top_operation">
-        <div class="tools">
+        <!-- <div class="tools">
           <el-icon><i-ep-Tools /></el-icon>
-        </div>
+        </div> -->
+        <!-- 退出按钮 -->
         <div class="close-bold" @click="closeWindow">
           <el-icon><i-ep-CloseBold /></el-icon>
         </div>
