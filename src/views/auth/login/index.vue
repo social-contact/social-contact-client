@@ -65,7 +65,6 @@ import { ipcRenderer } from "electron";
 import { onMounted, reactive, ref } from "vue";
 import type { FormInstance } from "element-plus";
 import md5 from "crypto-js/md5";
-import highToLowMD5 from "@/utils/highToLowMD5";
 
 import { UserLogin } from "@/api/auth";
 
@@ -144,7 +143,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
       buttonLoading.value = true;
       UserLogin({
         account: ruleForm.account,
-        password: highToLowMD5(md5(ruleForm.password).toString().toUpperCase()),
+        password: md5(ruleForm.password).toString().toUpperCase().slice(8, 24),
       })
         .then((res) => {
           buttonLoading.value = false;

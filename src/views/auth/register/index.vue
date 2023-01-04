@@ -103,7 +103,6 @@ import { reactive, ref } from "vue";
 import type { FormInstance } from "element-plus";
 import { ElMessage } from "element-plus";
 import md5 from "crypto-js/md5";
-import highToLowMD5 from "@/utils/highToLowMD5";
 
 import { UserRegister, UserSendMessage } from "@/api/auth";
 
@@ -212,7 +211,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
       buttonLoading.value = true;
       UserRegister({
         account: ruleForm.account,
-        password: highToLowMD5(md5(ruleForm.password).toString().toUpperCase()),
+        password: md5(ruleForm.password).toString().toUpperCase().slice(8, 24),
         email: ruleForm.email,
         code: ruleForm.code,
       })
