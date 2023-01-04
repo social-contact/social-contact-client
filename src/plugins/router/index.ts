@@ -17,12 +17,12 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: "/layout",
-        redirect: "/home",
+        redirect: "/sessions",
       },
       {
-        path: "/home",
-        name: "home",
-        component: () => import("@/views/home/index.vue"),
+        path: "/sessions",
+        name: "sessions",
+        component: () => import("@/views/sessions/index.vue"),
       },
     ],
   },
