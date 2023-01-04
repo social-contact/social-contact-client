@@ -38,7 +38,7 @@ $layout-head-hight: 80px;
     align-items: flex-start;
 
     &-menu {
-      width: 100px;
+      width: 95px;
       height: 100%;
       box-sizing: border-box;
       padding: $global-currency-padding;

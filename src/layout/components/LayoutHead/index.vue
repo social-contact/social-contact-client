@@ -18,13 +18,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const squareUrl = ref<string>(
-  "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
-);
+const squareUrl = ref<string>(require("@/assets/logo.png"));
 </script>
 
 <style lang="scss" scoped>
-$head-left-div-width: 100px;
+$head-left-div-width: 80px;
 $head-right-div-width: 250px;
 
 .layout-head {
@@ -40,6 +38,10 @@ $head-right-div-width: 250px;
 
   .logo {
     width: $head-left-div-width;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
 
     &-img {
       width: 40px;
