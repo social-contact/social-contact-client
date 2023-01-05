@@ -8,6 +8,7 @@ export default async function createWindow(): Promise<BrowserWindow> {
     width: 800,
     height: 600,
     frame: false, // 无边框
+    resizable: false, // 不允许改变窗口大小
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
