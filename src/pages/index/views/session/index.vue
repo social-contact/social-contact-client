@@ -6,7 +6,20 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { Socket } from "socket.io-client";
+import { inject, onMounted } from "vue";
+
+const socket = inject("socket") as Socket;
+
+// socket.on("connect", () => {
+//   console.log("连接成功");
+// });
+
+onMounted(() => {
+  socket.connect();
+});
+</script>
 
 <style lang="scss" scoped>
 $chat-left-div-width: 200px;
