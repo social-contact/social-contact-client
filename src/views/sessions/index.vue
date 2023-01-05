@@ -1,24 +1,42 @@
 <template>
   <div class="sessions">
-    <div class="sessions-chat">列表</div>
+    <div class="sessions-chat">
+      列表
+
+      <button @click="sendMessage">发送</button>
+    </div>
     <div class="sessions-window">聊天窗</div>
     <!-- <div class="sessions-info">聊天信息</div> -->
   </div>
 </template>
 
 <script setup lang="ts">
-import { Socket } from "socket.io-client";
+import io from "socket.io-client";
 import { inject, onMounted } from "vue";
 
-const socket = inject("socket") as Socket;
+// const socket = inject("socket") as Socket;
+const socket = io("http://localhost:9090");
+console.log(socket);
 
-// socket.on("connect", () => {
-//   console.log("连接成功");
-// });
+// console.log(socket.io.opts);
+
+// console.log(
+//   (socket.io.opts.query = {
+//     UID: 666,
+//   })
+// );
+
+socket.on("connect", () => {
+  console.log(`连接成功${socket.id}`);
+});
 
 onMounted(() => {
   socket.connect();
 });
+
+const sendMessage = () => {
+  socket.emit("push_event", { loginUserNum: "6", content: "nbnb" });
+};
 </script>
 
 <style lang="scss" scoped>

@@ -13,10 +13,9 @@ const app = createApp(App);
 
 // 注册
 app.use(socket, {
-  connection: "http://www.yuzuchan.top:3000",
+  connection: "http://dbwc3g.natappfree.cc",
   options: {
     autoConnect: false, //关闭自动连接
-    // ...其它选项
   },
 });
 app.use(store);

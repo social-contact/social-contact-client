@@ -6,3 +6,4 @@ declare module "*.vue" {
 }
 
 declare module "crypto-js/md5";
+declare module "socket.io-client";
