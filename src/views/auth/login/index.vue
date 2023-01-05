@@ -158,7 +158,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
         })
         .catch(() => {
           buttonLoading.value = false;
-          ipcRenderer.send("authLogin");
         });
     } else {
       return false;
