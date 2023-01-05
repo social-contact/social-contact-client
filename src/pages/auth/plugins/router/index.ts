@@ -1,31 +1,31 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import { ElectronWindowType } from "~electron/electron-window";
+import { ElectronWindowType } from "~electron/window-type";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    name: "AuthIndex",
-    component: () => import("@/views/auth/index.vue"),
-    meta: { title: "登录", bypassLogin: true, window: ElectronWindowType.Auth },
+    name: "AuthLayout",
+    component: () => import("../../layouts/AuthMain.vue"),
+    meta: { bypassLogin: true, window: ElectronWindowType.Auth },
+    children: [
+      {
+        path: "/",
+        redirect: "login",
+      },
+      {
+        path: "login",
+        name: "AuthLoginIndex",
+        component: () => import("../../views/login/Index.vue"),
+        meta: { title: "登录" },
+      },
+      {
+        path: "register",
+        name: "AuthRegisterIndex",
+        component: () => import("../../views/register/Index.vue"),
+        meta: { title: "注册" },
+      },
+    ],
   },
-  //   {
-  //     path: "/auth",
-  //     name: "AuthIndex",
-  //     component: () => import("@/views/auth/index.vue"),
-  //     meta: { title: "登录", bypassLogin: true, window: ElectronWindowType.Auth },
-  //   },
-  //   {
-  //     path: "/",
-  //     name: "AppMain",
-  //     component: () => import("@/layout/appMain.vue"),
-  //     children: [
-  //       {
-  //         path: "/",
-  //         name: "SessionIndex",
-  //         component: () => import("@/views/session/index.vue"),
-  //       },
-  //     ],
-  //   },
 ];
 
 const router = createRouter({

@@ -1,17 +1,17 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import { ElectronWindowType } from "~electron/electron-window";
+import { ElectronWindowType } from "~electron/window-type";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "AppMain",
-    component: () => import("@/layout/appMain.vue"),
+    component: () => import("../../layouts/appMain.vue"),
     meta: { title: "登录", window: ElectronWindowType.Main },
     children: [
       {
         path: "/",
         name: "SessionIndex",
-        component: () => import("@/views/session/index.vue"),
+        component: () => import("../../views/session/index.vue"),
       },
     ],
   },

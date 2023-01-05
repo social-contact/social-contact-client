@@ -1,4 +1,4 @@
-import { ElectronWindowType } from "../electron-window";
+import { ElectronWindowType } from "../window-type";
 import CommonWindow from "./common";
 
 export default class MainWindow extends CommonWindow {

@@ -1,5 +1,5 @@
 import router from "./plugins/router";
-import { ElectronWindowType } from "~electron/electron-window";
+import { ElectronWindowType } from "~electron/window-type";
 import useUserStore from "@/plugins/store/modules/user";
 import { ipcRenderer } from "electron";
 
@@ -24,7 +24,7 @@ export class AppPermission {
       //   else next();
       // }
 
-      if (!this.userStore.isLogin) {
+      if (!this.userStore.isLogin && to.name !== this.authRouteName) {
         ipcRenderer.send("switch-window", ElectronWindowType.Auth);
       }
 

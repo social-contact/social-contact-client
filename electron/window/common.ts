@@ -1,7 +1,7 @@
 import { BrowserWindow, BrowserWindowConstructorOptions } from "electron";
 import { trimEnd } from "lodash";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
-import { ElectronWindowType } from "~electron/electron-window";
+import { ElectronWindowType } from "~electron/window-type";
 
 interface IBrowserWindowConstructorOptions
   extends BrowserWindowConstructorOptions {
@@ -9,8 +9,8 @@ interface IBrowserWindowConstructorOptions
   loadUrl: (host: string) => string;
 }
 
-export default class CommonWindow implements ElectronWindow {
-  private win: BrowserWindow | null = null;
+export default class CommonWindow {
+  private win: BrowserWindow | null;
   private windowType: ElectronWindowType;
   private loadUrlFormatter: IBrowserWindowConstructorOptions["loadUrl"];
 
@@ -19,10 +19,6 @@ export default class CommonWindow implements ElectronWindow {
     this.windowType = options.windowType;
     this.loadUrlFormatter = options.loadUrl;
     this.initWindow();
-  }
-
-  getType() {
-    return this.windowType;
   }
 
   private async initWindow() {
@@ -51,12 +47,23 @@ export default class CommonWindow implements ElectronWindow {
     return this.win.loadURL(this.loadUrlFormatter(trimEnd(url, "/")));
   }
 
+  getType() {
+    return this.windowType;
+  }
+
   /**
    * 获取 Window 实例
    * @returns {BrowserWindow} Electron 视窗实例
    */
   getWindow() {
     return this.win;
+  }
+
+  /**
+   * 软关闭页面
+   */
+  close() {
+    this.win && this.win.close();
   }
 
   /**

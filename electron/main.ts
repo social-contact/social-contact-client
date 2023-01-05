@@ -1,12 +1,12 @@
 import { app, protocol, BrowserWindow, ipcMain } from "electron";
-import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
+import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 
 // 引入窗口
 import AuthWindow from "./window/authWindow";
 import MainWindow from "./window/mainWindow";
 
 // 引入模块
-import { ElectronWindowType } from "./electron-window";
+import { ElectronWindowType } from "./window-type";
 import CommonWindow from "./window/common";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -40,7 +40,7 @@ app.on("ready", async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
     try {
-      await installExtension(VUEJS3_DEVTOOLS);
+      await installExtension(VUEJS_DEVTOOLS);
     } catch (e) {
       console.error("Vue Devtools failed to install:", (e as Error).toString());
     }
@@ -52,23 +52,19 @@ app.on("ready", async () => {
 ipcMain.on(
   "switch-window",
   (event: Electron.IpcMainEvent, winType: ElectronWindowType) => {
-    const mainWinType = (mainWin && mainWin.getType()) || "";
+    if (!mainWin) return;
 
-    console.info("switch-window", winType);
-
-    // if (mainWin) {
-    //   mainWin.destroy();
-    // }
-
+    const mainWinType = mainWin.getType() || "";
     if (mainWinType === winType) return;
+
+    mainWin.close();
+
     switch (winType) {
       case ElectronWindowType.Auth:
         mainWin = new AuthWindow();
         break;
       case ElectronWindowType.Main:
         mainWin = new MainWindow();
-        break;
-      default:
         break;
     }
   }
@@ -90,8 +86,5 @@ if (isDevelopment) {
 }
 
 process.on("uncaughtException", function (error) {
-  console.info("====error====");
   console.error(error);
-  console.info("====error====");
-  // Handle the error
 });

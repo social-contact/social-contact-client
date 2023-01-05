@@ -1,3 +1,0 @@
-interface ElectronWindow {
-  getType(): ElectronWindowType;
-}

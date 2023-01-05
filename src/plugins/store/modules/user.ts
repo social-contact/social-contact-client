@@ -22,6 +22,7 @@ const useUserStore = defineStore("user", {
   },
   actions: {
     authLogin(res: LoginData): Promise<void> {
+      console.info(res);
       this.userInfo.account = res.account;
       // this.userInfo.password = res.password;
       this.accessToken = res.accessToken;
