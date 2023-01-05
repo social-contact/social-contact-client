@@ -20,6 +20,10 @@ module.exports = defineConfig({
       nodeIntegration: true, // 开启node支持
     },
   },
+  pages: {
+    index: "src/pages/index/main.ts",
+    auth: "src/pages/auth/main.ts",
+  },
   // 引入全局scss
   css: {
     loaderOptions: {
@@ -48,6 +52,7 @@ module.exports = defineConfig({
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "src"),
+        "~electron": path.resolve(__dirname, "electron"),
       },
     },
   },
