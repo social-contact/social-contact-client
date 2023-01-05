@@ -11,12 +11,12 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/auth/index.vue"),
   },
   {
-    path: "/layout",
-    name: "layout",
-    component: () => import("@/layout/index.vue"),
+    path: "/layouts",
+    name: "layouts",
+    component: () => import("@/layouts/index.vue"),
     children: [
       {
-        path: "/layout",
+        path: "/layouts",
         redirect: "/sessions",
       },
       {
