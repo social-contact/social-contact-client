@@ -8,7 +8,7 @@ interface State {
   accessToken: string;
 }
 
-export const userStore = defineStore("userStore", {
+const useUserStore = defineStore("user", {
   state: (): State => ({
     userInfo: {
       account: "",
@@ -18,6 +18,7 @@ export const userStore = defineStore("userStore", {
   }),
   getters: {
     getUserInfo: (state: State) => state.userInfo,
+    isLogin: (state) => !!state.accessToken,
   },
   actions: {
     authLogin(res: LoginData): Promise<void> {
@@ -33,3 +34,5 @@ export const userStore = defineStore("userStore", {
   },
   persist: true,
 });
+
+export default useUserStore;

@@ -5,15 +5,14 @@
 <script setup lang="ts">
 import { ipcRenderer } from "electron";
 import { onMounted } from "vue";
+import useUserStore from "@/plugins/store/modules/user";
 
-import { userStore } from "@/plugins/store/modules/user";
-
-const userStoreRecord = userStore();
+const userStore = useUserStore();
 
 onMounted(() => {
   // 设置监听退出程序
   ipcRenderer.on("window-close", () => {
-    userStoreRecord.logout();
+    userStore.logout();
   });
 });
 </script>

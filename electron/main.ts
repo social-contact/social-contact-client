@@ -1,17 +1,17 @@
 import { app, protocol, BrowserWindow, ipcMain } from "electron";
-import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS3_DEVTOOLS } from "electron-devtools-installer";
 
 // 引入窗口
-import createWindow from "./window/mainWindow";
-import authWindow from "./window/authWindow";
+import AuthWindow from "./window/authWindow";
+import MainWindow from "./window/mainWindow";
 
 // 引入模块
-import { closeWindow } from "./modules/index";
+import { ElectronWindowType } from "./electron-window";
+import CommonWindow from "./window/common";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 
-export let mainWin: BrowserWindow | null = null;
+export let mainWin: CommonWindow | null = null;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -30,7 +30,7 @@ app.on("window-all-closed", () => {
 app.on("activate", () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  if (BrowserWindow.getAllWindows().length === 0) new AuthWindow();
 });
 
 // This method will be called when Electron has finished
@@ -45,18 +45,34 @@ app.on("ready", async () => {
       console.error("Vue Devtools failed to install:", (e as Error).toString());
     }
   }
-  // 创建登录窗口
-  mainWin = await authWindow();
 
-  // 接收登录
-  ipcMain.on("authLogin", async () => {
-    (mainWin as BrowserWindow).close();
-    mainWin = await createWindow();
-  });
-
-  // 模块
-  closeWindow(mainWin);
+  mainWin = new AuthWindow();
 });
+
+ipcMain.on(
+  "switch-window",
+  (event: Electron.IpcMainEvent, winType: ElectronWindowType) => {
+    const mainWinType = (mainWin && mainWin.getType()) || "";
+
+    console.info("switch-window", winType);
+
+    // if (mainWin) {
+    //   mainWin.destroy();
+    // }
+
+    if (mainWinType === winType) return;
+    switch (winType) {
+      case ElectronWindowType.Auth:
+        mainWin = new AuthWindow();
+        break;
+      case ElectronWindowType.Main:
+        mainWin = new MainWindow();
+        break;
+      default:
+        break;
+    }
+  }
+);
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
@@ -72,3 +88,10 @@ if (isDevelopment) {
     });
   }
 }
+
+process.on("uncaughtException", function (error) {
+  console.info("====error====");
+  console.error(error);
+  console.info("====error====");
+  // Handle the error
+});

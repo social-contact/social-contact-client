@@ -48,8 +48,9 @@
               type="primary"
               :loading="buttonLoading"
               @click="submitForm(ruleFormRef)"
-              >登录</el-button
             >
+              登录
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -61,16 +62,17 @@
 </template>
 
 <script setup lang="ts">
-import { ipcRenderer } from "electron";
 import { onMounted, reactive, ref } from "vue";
+import { ipcRenderer } from "electron";
 import type { FormInstance } from "element-plus";
 import md5 from "crypto-js/md5";
 
 import { UserLogin } from "@/api/auth";
 
-import { userStore } from "@/plugins/store/modules/user";
+import useUserStore from "@/plugins/store/modules/user";
+import { ElectronWindowType } from "~electron/electron-window";
 
-const userStoreRecord = userStore();
+const userStoreRecord = useUserStore();
 
 const Emit = defineEmits(["onSign"]);
 
@@ -147,18 +149,28 @@ const submitForm = (formEl: FormInstance | undefined) => {
       })
         .then((res) => {
           buttonLoading.value = false;
+
           const user: LoginData = {
             account: ruleForm.account,
-            // password: ruleForm.password,
             accessToken: res,
           };
           userStoreRecord.authLogin(user).then(() => {
-            ipcRenderer.send("authLogin");
+            // ipcRenderer.send("authLogin");
           });
         })
         .catch(() => {
           buttonLoading.value = false;
-          ipcRenderer.send("authLogin");
+
+          if (process.env.NODE_ENV === "development") {
+            userStoreRecord
+              .authLogin({
+                account: ruleForm.account,
+                accessToken: "FAKE_ACCESS_TOKEN",
+              })
+              .then(() => {
+                ipcRenderer.send("switch-window", ElectronWindowType.Main);
+              });
+          }
         });
     } else {
       return false;
