@@ -48,8 +48,9 @@
               type="primary"
               :loading="buttonLoading"
               @click="submitForm(ruleFormRef)"
-              >登录</el-button
             >
+              登录
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -61,18 +62,19 @@
 </template>
 
 <script setup lang="ts">
-import { ipcRenderer } from "electron";
 import { onMounted, reactive, ref } from "vue";
 import type { FormInstance } from "element-plus";
 import md5 from "crypto-js/md5";
 
 import { UserLogin } from "@/api/auth";
 
-import { userStore } from "@/plugins/store/modules/user";
+import useUserStore from "@/plugins/store/modules/user";
+import { ElectronWindowType } from "~electron/window-type";
+import ElectronWindowHelper from "@/shared/helper/electron-window";
+import { useRouter } from "vue-router";
 
-const userStoreRecord = userStore();
-
-const Emit = defineEmits(["onSign"]);
+const userStore = useUserStore();
+const router = useRouter();
 
 const squareUrl = ref<string>(
   "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png"
@@ -131,8 +133,8 @@ const rules = reactive({
 
 onMounted(() => {
   // 自动获取已经保存的账号密码
-  ruleForm.account = userStoreRecord.getUserInfo.account;
-  ruleForm.password = userStoreRecord.getUserInfo.password;
+  ruleForm.account = userStore.getUserInfo.account;
+  ruleForm.password = userStore.getUserInfo.password;
 });
 
 // form
@@ -147,17 +149,28 @@ const submitForm = (formEl: FormInstance | undefined) => {
       })
         .then((res) => {
           buttonLoading.value = false;
+
           const user: LoginData = {
             account: ruleForm.account,
-            // password: ruleForm.password,
             accessToken: res,
           };
-          userStoreRecord.authLogin(user).then(() => {
-            ipcRenderer.send("authLogin");
+          userStore.authLogin(user).then(() => {
+            // ipcRenderer.send("authLogin");
           });
         })
         .catch(() => {
           buttonLoading.value = false;
+
+          if (process.env.NODE_ENV === "development") {
+            userStore
+              .authLogin({
+                account: ruleForm.account,
+                accessToken: "FAKE_ACCESS_TOKEN",
+              })
+              .then(() => {
+                ElectronWindowHelper.switch(ElectronWindowType.Main);
+              });
+          }
         });
     } else {
       return false;
@@ -168,7 +181,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
 const onSign = () => {
   // 重置 password 校验
   ruleFormRef.value?.resetFields(["password"]);
-  Emit("onSign");
+  router.push({ name: "AuthRegisterIndex" });
 };
 </script>
 

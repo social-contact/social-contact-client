@@ -1,10 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./plugins/router";
-import store from "./plugins/store";
-
-// socket.io
-import socket from "@/plugins/socket/index";
+import store from "@/plugins/store";
 
 // 初始化样式
 import "@/styles/reset.css";
@@ -12,12 +9,6 @@ import "@/styles/reset.css";
 const app = createApp(App);
 
 // 注册
-app.use(socket, {
-  connection: "http://dbwc3g.natappfree.cc",
-  options: {
-    autoConnect: false, //关闭自动连接
-  },
-});
 app.use(store);
 app.use(router);
 app.mount("#app");
