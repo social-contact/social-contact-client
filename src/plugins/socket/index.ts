@@ -1,14 +1,9 @@
-import { App } from "vue";
-import io from "socket.io-client";
+import { io } from "socket.io-client";
 
-interface Install {
-  connection: string;
-  options: object;
-}
+const socket = io("http://22cz6b.natappfree.cc", {
+  options: {
+    autoConnect: false, //关闭自动连接
+  },
+});
 
-const install = (app: App<Element>, { connection, options }: Install) => {
-  const socket = io(connection, options);
-  app.provide("socket", socket);
-};
-
-export default install;
+export default socket;

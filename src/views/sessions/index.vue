@@ -11,23 +11,14 @@
 </template>
 
 <script setup lang="ts">
-import io from "socket.io-client";
-import { inject, onMounted } from "vue";
-
-// const socket = inject("socket") as Socket;
-const socket = io("http://localhost:9090");
-console.log(socket);
-
-// console.log(socket.io.opts);
-
-// console.log(
-//   (socket.io.opts.query = {
-//     UID: 666,
-//   })
-// );
+import { onMounted } from "vue";
+import socket from "@/plugins/socket/index";
 
 socket.on("connect", () => {
   console.log(`连接成功${socket.id}`);
+});
+socket.on("aaaa", (msg: string) => {
+  console.log(`msg:${msg}`);
 });
 
 onMounted(() => {

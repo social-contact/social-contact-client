@@ -20,7 +20,7 @@
     "node-polyfill-webpack-plugin": "^2.0.1",
     "pinia": "^2.0.28",
     "pinia-plugin-persistedstate": "^3.0.2",
-    "socket.io-client": "^2.1.1",
+    "socket.io-client": "^4.5.4",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3"
   },
