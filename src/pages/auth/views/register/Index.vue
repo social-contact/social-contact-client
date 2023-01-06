@@ -105,8 +105,9 @@ import { ElMessage } from "element-plus";
 import md5 from "crypto-js/md5";
 
 import { UserRegister, UserSendMessage } from "@/api/auth";
+import { useRouter } from "vue-router";
 
-const Emit = defineEmits(["onSign"]);
+const router = useRouter();
 
 // 按钮加载状态
 const buttonLoading = ref<boolean>(false);
@@ -273,7 +274,7 @@ const getCode = () => {
 
 const onSign = () => {
   ruleFormRef.value?.resetFields();
-  Emit("onSign");
+  router.push({ name: "AuthLoginIndex" });
 };
 </script>
 
